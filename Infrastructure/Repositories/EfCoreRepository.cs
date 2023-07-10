@@ -27,7 +27,7 @@ public class EfCoreRepository : IDatabaseRepository<EfCoreRepository>
         var result = await _db.Photos.FindAsync(id);
         if (result.IsNull())
         {
-            return new Result<Photo>(new KeyNotFoundException());
+            return new Result<Photo>(new KeyNotFoundException("Value with this Id is not exists."));
         }
 
         return result!;
@@ -39,7 +39,7 @@ public class EfCoreRepository : IDatabaseRepository<EfCoreRepository>
             .AddAsync(photo, cancellationToken);
         if (result.State != EntityState.Added)
         {
-            return new Result<Photo>(new InvalidOperationException("Error while adding new value"));
+            return new Result<Photo>(new InvalidOperationException("Error while adding new value."));
         }
 
         await _db.SaveChangesAsync(cancellationToken);

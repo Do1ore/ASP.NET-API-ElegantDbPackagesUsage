@@ -1,4 +1,5 @@
 using Api.Abstractions;
+using Api.DTOs;
 using Application.Features.EfCoreFeatures;
 using Domain.Entities;
 using MediatR;
@@ -33,10 +34,11 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
         throw new NotImplementedException();
     }
 
-    private async Task<IResult> CreatePhoto(IMediator mediator, Photo photo, CancellationToken token)
+    private async Task<IResult> CreatePhoto(IMediator mediator, PhotoDto photo, CancellationToken token)
     {
         var result = await mediator.Send(new AddPhotoRequest(photo), token);
-        return TypedResults.Ok(photo);
+        return result.Match<IResult>(value => { return TypedResults.Ok(value); }, exception =>
+            TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
     }
 
     private Task<IResult> GetPhotoById(IMediator mediator, CancellationToken token)

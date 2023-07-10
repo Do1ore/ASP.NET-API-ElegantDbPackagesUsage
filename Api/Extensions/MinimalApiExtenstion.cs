@@ -1,6 +1,9 @@
 using System.Reflection;
 using Api.Abstractions;
 using Api.DTOs;
+using Application.Features.EfCoreFeatures;
+using Domain.Entities;
+using FluentValidation;
 
 namespace Api.Extensions;
 
@@ -45,5 +48,10 @@ public static class MinimalApiExtenstion
                 throw;
             }
         });
+    }
+
+    public static void AddValidators(this IServiceCollection services)
+    {
+        services.AddTransient<IValidator<AddPhotoRequest>, AddPhotoRequestValidator>();
     }
 }
