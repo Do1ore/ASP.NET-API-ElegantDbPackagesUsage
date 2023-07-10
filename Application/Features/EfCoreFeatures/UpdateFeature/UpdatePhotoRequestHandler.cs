@@ -24,6 +24,9 @@ public class UpdatePhotoRequestHandler : IRequestHandler<UpdatePhotoRequest, Res
         if (!validationResult.IsValid)
             return new Result<Photo>(new ArgumentException(string.Join(",", validationResult.Errors)));
 
+        if (!await _repository.IsPhotoExists(request.Photo.Id, cancellationToken))
+            return new Result<Photo>(new ArgumentException("Value with this key is not exists"));
+
         var result = await _repository.UpdatePhoto(request.Photo, cancellationToken);
 
         return result;

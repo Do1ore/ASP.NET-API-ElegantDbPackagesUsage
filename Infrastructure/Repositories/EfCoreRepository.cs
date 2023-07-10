@@ -74,4 +74,11 @@ public class EfCoreRepository : IDatabaseRepository<EfCoreRepository>
         var result = await _db.Photos!.Where(a => a.Id == id).ExecuteDeleteAsync(cancellationToken);
         return result;
     }
+
+    public async Task<bool> IsPhotoExists(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _db.Photos!.AnyAsync(a => a.Id == id, cancellationToken);
+
+        return result;
+    }
 }

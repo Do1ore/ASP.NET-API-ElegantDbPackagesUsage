@@ -1,7 +1,7 @@
 using Api.Abstractions;
 using Api.DTOs;
-using Application.Features.EfCoreFeatures;
 using Application.Features.EfCoreFeatures.AddFeature;
+using Application.Features.EfCoreFeatures.DeleteFeature;
 using Application.Features.EfCoreFeatures.GetAllFeature;
 using Application.Features.EfCoreFeatures.GetByIdFeature;
 using Application.Features.EfCoreFeatures.UpdateFeature;
@@ -39,32 +39,36 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     private async Task<IResult> UpdatePhoto(IMediator mediator, PhotoDto photoDto, CancellationToken token)
     {
         var result = await mediator.Send(new UpdatePhotoRequest(photoDto), token);
-        return result.Match<IResult>(value => { return TypedResults.Ok<Photo>(value); },
-            exception =>
-            {
-                return TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message));
-            });
+        return result.Match<IResult>(Succ: TypedResults.Ok<Photo>,
+            exception => TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
     }
 
     private async Task<IResult> CreatePhoto(IMediator mediator, PhotoDto photo, CancellationToken token)
     {
         var result = await mediator.Send(new AddPhotoRequest(photo), token);
         return result.Match<IResult>(TypedResults.Ok, exception =>
-            TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
+            TypedResults.BadRequest(new ErrorModel(
+                StatusCodes.Status400BadRequest,
+                exception.Message)));
     }
 
     private async Task<IResult> GetPhotoById(IMediator mediator, Guid id, CancellationToken token)
     {
         var result = await mediator.Send(new GetByIdRequest(id), token);
+
         return result.Match<IResult>(TypedResults.Ok,
             exception => TypedResults.BadRequest(
                 new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
     }
 
 
-    private async Task<IResult> DeletePhoto(IMediator mediator, string id)
+    private async Task<IResult> DeletePhoto(IMediator mediator, Guid id)
     {
-        var result = await mediator.Send(new AddPhotoRequest(new Photo()));
-        return TypedResults.Ok();
+        var result = await mediator.Send(new DeletePhotoRequest(id));
+
+        return result.Match<IResult>(value => TypedResults.Ok("Rows deleted: " + value),
+            exception => TypedResults.BadRequest(new ErrorModel(
+                StatusCodes.Status500InternalServerError,
+                exception.Message)));
     }
 }
