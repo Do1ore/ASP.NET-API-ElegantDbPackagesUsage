@@ -14,7 +14,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
 {
     public void RegisterEndpoints(WebApplication app)
     {
-        var photos = app.MapGroup("/photos");
+        var photos = app.MapGroup("api/v1/photos/");
 
         photos.MapGet("/", GetAllPhotos);
 
@@ -39,7 +39,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     private async Task<IResult> UpdatePhoto(IMediator mediator, PhotoDto photoDto, CancellationToken token)
     {
         var result = await mediator.Send(new UpdatePhotoRequest(photoDto), token);
-        return result.Match<IResult>(Succ: TypedResults.Ok<Photo>,
+        return result.Match<IResult>(Succ: TypedResults.Ok,
             exception => TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
     }
 
