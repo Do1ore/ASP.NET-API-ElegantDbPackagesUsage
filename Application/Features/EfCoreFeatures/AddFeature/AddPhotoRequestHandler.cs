@@ -1,7 +1,6 @@
 using FluentValidation;
 using Infrastructure.Abstractions;
 using Infrastructure.Repositories;
-using LanguageExt.Common;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace Application.Features.EfCoreFeatures.AddFeature;
@@ -22,9 +21,7 @@ public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Ph
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
-        {
             return new Result<Photo>(new ValidationException(string.Join(", ", validationResult.Errors)));
-        }
 
         var result = await _repository.CreatePhoto(request.Photo, cancellationToken);
         return result;

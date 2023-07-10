@@ -7,7 +7,7 @@ public class UpdatePhotoRequestValidator : AbstractValidator<UpdatePhotoRequest>
     public UpdatePhotoRequestValidator()
     {
         RuleFor(a => a.Photo.PhotoName)
-            .Must(l => l.All(Char.IsLetter))
+            .Must(l => l.All(char.IsLetter))
             .WithMessage("Photo name must contain only letters");
 
         RuleFor(a => a.Photo.FileExtension)

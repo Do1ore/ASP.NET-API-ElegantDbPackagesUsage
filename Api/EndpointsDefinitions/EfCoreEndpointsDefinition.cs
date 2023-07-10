@@ -2,6 +2,8 @@ using Api.Abstractions;
 using Api.DTOs;
 using Application.Features.EfCoreFeatures;
 using Application.Features.EfCoreFeatures.AddFeature;
+using Application.Features.EfCoreFeatures.GetAllFeature;
+using Application.Features.EfCoreFeatures.GetByIdFeature;
 using Application.Features.EfCoreFeatures.UpdateFeature;
 using Domain.Entities;
 using MediatR;
@@ -26,9 +28,12 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     }
 
 
-    private Task<IResult> GetAllPhotos(IMediator mediator, CancellationToken token)
+    private async Task<IResult> GetAllPhotos(IMediator mediator, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var result = await mediator.Send(new GetAllPhotosRequest(), token);
+        return result.Match<IResult>(TypedResults.Ok,
+            exception => TypedResults.BadRequest(
+                new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
     }
 
     private async Task<IResult> UpdatePhoto(IMediator mediator, PhotoDto photoDto, CancellationToken token)
@@ -44,13 +49,16 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     private async Task<IResult> CreatePhoto(IMediator mediator, PhotoDto photo, CancellationToken token)
     {
         var result = await mediator.Send(new AddPhotoRequest(photo), token);
-        return result.Match<IResult>(value => { return TypedResults.Ok(value); }, exception =>
+        return result.Match<IResult>(TypedResults.Ok, exception =>
             TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
     }
 
-    private Task<IResult> GetPhotoById(IMediator mediator, CancellationToken token)
+    private async Task<IResult> GetPhotoById(IMediator mediator, Guid id, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var result = await mediator.Send(new GetByIdRequest(id), token);
+        return result.Match<IResult>(TypedResults.Ok,
+            exception => TypedResults.BadRequest(
+                new ErrorModel(StatusCodes.Status400BadRequest, exception.Message)));
     }
 
 

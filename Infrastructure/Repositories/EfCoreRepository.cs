@@ -27,7 +27,7 @@ public class EfCoreRepository : IDatabaseRepository<EfCoreRepository>
         var result = await _db.Photos!.FindAsync(id);
         if (result.IsNull())
         {
-            return new Result<Photo>(new KeyNotFoundException("Value with this Id is not exists."));
+            return new Result<Photo>(new KeyNotFoundException("Value with this key is not exists."));
         }
 
         return result!;
@@ -52,7 +52,7 @@ public class EfCoreRepository : IDatabaseRepository<EfCoreRepository>
 
         if (photoToUpdate == null)
         {
-            return new Result<Photo>(new ArgumentException("Value with this key is not exists"));
+            return new Result<Photo>(new ArgumentException("Value with this key is not exists."));
         }
 
         var result = _db.Photos.Update(photoToUpdate);
@@ -66,7 +66,7 @@ public class EfCoreRepository : IDatabaseRepository<EfCoreRepository>
             return result.Entity;
         }
 
-        return new Result<Photo>(new ApplicationException("Unknown exception"));
+        return new Result<Photo>(new ApplicationException("Unknown exception."));
     }
 
     public async Task<Result<int>> DeletePhoto(Guid id, CancellationToken cancellationToken)
