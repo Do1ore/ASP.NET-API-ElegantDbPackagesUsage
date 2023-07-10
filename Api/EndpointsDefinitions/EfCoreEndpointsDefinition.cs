@@ -33,9 +33,10 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
         throw new NotImplementedException();
     }
 
-    private Task<IResult> CreatePhoto(IMediator mediator, CancellationToken token)
+    private async Task<IResult> CreatePhoto(IMediator mediator, Photo photo, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var result = await mediator.Send(new AddPhotoRequest(photo), token);
+        return TypedResults.Ok(photo);
     }
 
     private Task<IResult> GetPhotoById(IMediator mediator, CancellationToken token)

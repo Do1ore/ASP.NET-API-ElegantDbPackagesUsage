@@ -1,3 +1,4 @@
+using System.Reflection;
 using Api.Abstractions;
 using Api.DTOs;
 
@@ -18,6 +19,14 @@ public static class MinimalApiExtenstion
         {
             endpoint.RegisterEndpoints(app);
         }
+    }
+
+    public static void AddAndConfigureMediatR(this IServiceCollection services)
+    {
+        services.AddMediatR(cfg => cfg
+            .RegisterServicesFromAssembly(
+                Assembly.GetAssembly(typeof(Application.Features.EfCoreFeatures.AddPhotoRequestHandler)) ??
+                throw new InvalidOperationException()));
     }
 
     public static void AddGlobalExceptionHandling(this WebApplication app)

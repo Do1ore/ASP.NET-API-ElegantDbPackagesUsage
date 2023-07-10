@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Reflection;
 using Api.Extensions;
 
@@ -7,10 +8,13 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddAndConfigureMediatR();
 
 //Database configuration 
-builder.Services.ConfigureDatabase(builder);
+builder.Services.ConfigureDatabase(builder.Configuration);
+
+//Repositories
+builder.Services.AddEfCoreCustomRepository();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -22,7 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
-app.AddGlobalExceptionHandling();
+//app.AddGlobalExceptionHandling();
 
 app.RegisterEndpointDefinitions();
 

@@ -1,12 +1,22 @@
 using Domain.Entities;
+using Infrastructure.Abstractions;
+using Infrastructure.Repositories;
 using MediatR;
 
 namespace Application.Features.EfCoreFeatures;
 
 public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Photo>
 {
-    public Task<Photo> Handle(AddPhotoRequest request, CancellationToken cancellationToken)
+    private readonly IDatabaseRepository<EfCoreRepository> _repository;
+
+    public AddPhotoRequestHandler(IDatabaseRepository<EfCoreRepository> repository)
     {
-        return Task.FromResult(new Photo());
+        _repository = repository;
+    }
+
+    public async Task<Photo> Handle(AddPhotoRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.CreatePhoto(request.Photo, cancellationToken);
+        return result.Match(a => a, exception => throw exception);
     }
 }

@@ -1,14 +1,13 @@
 using Infrastructure.Data.EfCore;
-using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Extensions;
 
 public static class DatabaseConfiguration
 {
-    public static void ConfigureDatabase(this IServiceCollection services, WebApplicationBuilder builder)
+    public static void ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = builder.Configuration.GetConnectionString("PostgreSQLConnection") ??
+        var connectionString = configuration.GetConnectionString("PostgreSQLConnection") ??
                                throw new InvalidOperationException("Connection string not found");
 
         services.AddDbContext<EfCorePhotosContext>(options => options
