@@ -1,11 +1,10 @@
-using System.Text.Json.Nodes;
 using FluentValidation;
 using Infrastructure.Abstractions;
 using Infrastructure.Repositories;
 using LanguageExt.Common;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
-namespace Application.Features.EfCoreFeatures;
+namespace Application.Features.EfCoreFeatures.AddFeature;
 
 public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Photo>>
 {

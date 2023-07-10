@@ -2,6 +2,8 @@ using System.Reflection;
 using Api.Abstractions;
 using Api.DTOs;
 using Application.Features.EfCoreFeatures;
+using Application.Features.EfCoreFeatures.AddFeature;
+using Application.Features.EfCoreFeatures.UpdateFeature;
 using Domain.Entities;
 using FluentValidation;
 
@@ -28,7 +30,7 @@ public static class MinimalApiExtenstion
     {
         services.AddMediatR(cfg => cfg
             .RegisterServicesFromAssembly(
-                Assembly.GetAssembly(typeof(Application.Features.EfCoreFeatures.AddPhotoRequestHandler)) ??
+                Assembly.GetAssembly(typeof(AddPhotoRequestHandler)) ??
                 throw new InvalidOperationException()));
     }
 
@@ -53,5 +55,6 @@ public static class MinimalApiExtenstion
     public static void AddValidators(this IServiceCollection services)
     {
         services.AddTransient<IValidator<AddPhotoRequest>, AddPhotoRequestValidator>();
+        services.AddTransient<IValidator<UpdatePhotoRequest>, UpdatePhotoRequestValidator>();
     }
 }

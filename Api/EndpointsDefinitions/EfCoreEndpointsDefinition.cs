@@ -1,6 +1,8 @@
 using Api.Abstractions;
 using Api.DTOs;
 using Application.Features.EfCoreFeatures;
+using Application.Features.EfCoreFeatures.AddFeature;
+using Application.Features.EfCoreFeatures.UpdateFeature;
 using Domain.Entities;
 using MediatR;
 
@@ -18,7 +20,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
 
         photos.MapPost("/", CreatePhoto);
 
-        photos.MapPut("/{id}", UpdatePhoto);
+        photos.MapPut("/", UpdatePhoto);
 
         photos.MapDelete("/{id}", DeletePhoto);
     }
@@ -29,9 +31,14 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
         throw new NotImplementedException();
     }
 
-    private Task<IResult> UpdatePhoto(IMediator mediator, CancellationToken token)
+    private async Task<IResult> UpdatePhoto(IMediator mediator, PhotoDto photoDto, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var result = await mediator.Send(new UpdatePhotoRequest(photoDto), token);
+        return result.Match<IResult>(value => { return TypedResults.Ok<Photo>(value); },
+            exception =>
+            {
+                return TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message));
+            });
     }
 
     private async Task<IResult> CreatePhoto(IMediator mediator, PhotoDto photo, CancellationToken token)
