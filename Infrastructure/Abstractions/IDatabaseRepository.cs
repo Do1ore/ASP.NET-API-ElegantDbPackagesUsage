@@ -3,7 +3,7 @@ using LanguageExt.Common;
 
 namespace Infrastructure.Abstractions;
 
-public interface IDatabaseRepository<T> where T : class
+public interface IDatabaseRepository
 {
     Task<Result<List<Photo>>> GetAllPhotos(CancellationToken cancellationToken);
     Task<Result<Photo>> GetPhotoById(Guid id, CancellationToken cancellationToken);

@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class EfCoreRepository : IDatabaseRepository<EfCoreRepository>
+public class EfCoreRepository : IDatabaseRepository
 {
-    private readonly EfCorePhotosContext _db;
+    private readonly EfCorePhotosContext? _db;
 
-    public EfCoreRepository(EfCorePhotosContext db)
+    public EfCoreRepository(EfCorePhotosContext? db)
     {
         _db = db;
     }

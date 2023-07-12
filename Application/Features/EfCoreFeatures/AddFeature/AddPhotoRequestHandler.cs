@@ -1,20 +1,21 @@
+using Application.Contracts;
 using FluentValidation;
-using Infrastructure.Abstractions;
-using Infrastructure.Repositories;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace Application.Features.EfCoreFeatures.AddFeature;
 
 public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Photo>>
 {
-    private readonly IDatabaseRepository<EfCoreRepository> _repository;
     private readonly IValidator<AddPhotoRequest> _validator;
+    private readonly IRepositoryFactory _repositoryFactory;
 
-    public AddPhotoRequestHandler(IDatabaseRepository<EfCoreRepository> repository,
+
+    public AddPhotoRequestHandler(
+        IRepositoryFactory repositoryFactory,
         IValidator<AddPhotoRequest> validator)
     {
-        _repository = repository;
         _validator = validator;
+        _repositoryFactory = repositoryFactory;
     }
 
     public async Task<Result<Photo>> Handle(AddPhotoRequest request, CancellationToken cancellationToken)
@@ -23,7 +24,9 @@ public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Ph
         if (!validationResult.IsValid)
             return new Result<Photo>(new ValidationException(string.Join(", ", validationResult.Errors)));
 
-        var result = await _repository.CreatePhoto(request.Photo, cancellationToken);
-        return result;
+        var repository = await _repositoryFactory.CreateRepository(request.RepositoryType);
+        await repository.CreatePhoto(request.Photo, cancellationToken);
+
+        return new Result<Photo>();
     }
 }

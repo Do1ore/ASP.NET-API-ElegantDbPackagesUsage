@@ -1,3 +1,4 @@
+using Application.Contracts;
 using Infrastructure.Abstractions;
 using Infrastructure.Repositories;
 
@@ -5,16 +6,17 @@ namespace Application.Features.EfCoreFeatures.GetByIdFeature;
 
 public class GetByIdRequestHandler : IRequestHandler<GetByIdRequest, Result<Photo>>
 {
-    private readonly IDatabaseRepository<AdoNetRepository> _repository;
+    private readonly IRepositoryFactory _repositoryFactory;
 
-    public GetByIdRequestHandler(IDatabaseRepository<AdoNetRepository> repository)
+    public GetByIdRequestHandler(IRepositoryFactory repositoryFactory)
     {
-        _repository = repository;
+        _repositoryFactory = repositoryFactory;
     }
 
     public async Task<Result<Photo>> Handle(GetByIdRequest request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetPhotoById(request.PhotoId, cancellationToken);
+        var repository = await _repositoryFactory.CreateRepository(request.RepositoryType);
+        var result = await repository.GetPhotoById(request.PhotoId, cancellationToken);
         return result;
     }
 }

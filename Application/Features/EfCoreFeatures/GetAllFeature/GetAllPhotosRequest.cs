@@ -1,3 +1,5 @@
+using Infrastructure.Enums;
+
 namespace Application.Features.EfCoreFeatures.GetAllFeature;
 
-public record class GetAllPhotosRequest : IRequest<Result<List<Photo>>>;
+public record GetAllPhotosRequest(RepositoryType RepositoryType) : IRequest<Result<List<Photo>>>;

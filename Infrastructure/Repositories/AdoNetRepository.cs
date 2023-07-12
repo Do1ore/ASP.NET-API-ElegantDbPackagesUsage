@@ -6,13 +6,13 @@ using Npgsql;
 
 namespace Infrastructure.Repositories;
 
-public class AdoNetRepository : IDatabaseRepository<AdoNetRepository>
+public class AdoNetRepository : IDatabaseRepository
 {
     private readonly string _connectionString;
 
-    public AdoNetRepository(IConfiguration configuration)
+    public AdoNetRepository(IConfiguration? configuration)
     {
-        _connectionString = configuration.GetConnectionString("PostgreSQLConnection") ??
+        _connectionString = configuration!.GetConnectionString("PostgreSQLConnection") ??
                             throw new InvalidOperationException("Connection string not found");
     }
 

@@ -1,3 +1,4 @@
+using Application.Contracts;
 using Infrastructure.Abstractions;
 using Infrastructure.Repositories;
 
@@ -5,21 +6,20 @@ namespace Application.Features.EfCoreFeatures.GetAllFeature;
 
 public class GetAllPhotosRequestHandler : IRequestHandler<GetAllPhotosRequest, Result<List<Photo>>>
 {
-    private readonly IDatabaseRepository<EfCoreRepository> _repository;
+    private readonly IRepositoryFactory _repositoryFactory;
 
-
-    public GetAllPhotosRequestHandler(IDatabaseRepository<EfCoreRepository> repository)
+    public GetAllPhotosRequestHandler(IRepositoryFactory repositoryFactory)
     {
-        _repository = repository;
+        _repositoryFactory = repositoryFactory;
     }
 
 
-    public async Task<Result<List<Photo>>> Handle(GetAllPhotosRequest photosRequest,
+    public async Task<Result<List<Photo>>> Handle(GetAllPhotosRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAllPhotos(cancellationToken);
-
-
+        var repository = await _repositoryFactory.CreateRepository(request.RepositoryType);
+        var result = await repository.GetAllPhotos(cancellationToken);
+        
         return result;
     }
 }

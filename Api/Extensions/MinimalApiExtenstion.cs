@@ -6,6 +6,7 @@ using Application.Features.EfCoreFeatures.AddFeature;
 using Application.Features.EfCoreFeatures.UpdateFeature;
 using Domain.Entities;
 using FluentValidation;
+using Infrastructure.Enums;
 
 namespace Api.Extensions;
 
@@ -56,5 +57,16 @@ public static class MinimalApiExtenstion
     {
         services.AddTransient<IValidator<AddPhotoRequest>, AddPhotoRequestValidator>();
         services.AddTransient<IValidator<UpdatePhotoRequest>, UpdatePhotoRequestValidator>();
+    }
+
+
+    public static RepositoryType ToRepositoryType(this string stringRepositoryType)
+    {
+        return stringRepositoryType.ToLower() switch
+        {
+            "efcore" => RepositoryType.EfCore,
+            "adonet" => RepositoryType.AdoNet,
+            _ => throw new ArgumentException($"Type {stringRepositoryType} is not exists for repository")
+        };
     }
 }
