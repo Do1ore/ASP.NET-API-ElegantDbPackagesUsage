@@ -2,7 +2,7 @@ name: ASP.NET MININAL API CI
 
 on:
   push:
-    branches: [ "master, features" ]
+    branches: [ "master, feature" ]
   pull_request:
     branches: [ "master" ]
 
