@@ -5,9 +5,9 @@ namespace Application.Features.EfCoreFeatures.GetByIdFeature;
 
 public class GetByIdRequestHandler : IRequestHandler<GetByIdRequest, Result<Photo>>
 {
-    private readonly IDatabaseRepository<EfCoreRepository> _repository;
+    private readonly IDatabaseRepository<AdoNetRepository> _repository;
 
-    public GetByIdRequestHandler(IDatabaseRepository<EfCoreRepository> repository)
+    public GetByIdRequestHandler(IDatabaseRepository<AdoNetRepository> repository)
     {
         _repository = repository;
     }
