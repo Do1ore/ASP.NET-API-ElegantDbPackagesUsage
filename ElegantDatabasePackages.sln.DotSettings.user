@@ -4,6 +4,11 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\vladx\.nuget\packages\sd.llblgen.pro.ormsupportclasses\5.10.1\lib\netstandard2.0\SD.LLBLGen.Pro.ORMSupportClasses.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=97c11853_002Dd69c_002D44f1_002D9b96_002De44a9ab1d634/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RepositoryFactoryTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::D9E0FF8F-7689-42FB-A84B-8D6F667CBB25::net8.0::Tests.RepositoryFactoryTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Llbl/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Mediat/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Postgre/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
