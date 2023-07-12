@@ -25,8 +25,9 @@ public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Ph
             return new Result<Photo>(new ValidationException(string.Join(", ", validationResult.Errors)));
 
         var repository = await _repositoryFactory.CreateRepository(request.RepositoryType);
-        await repository.CreatePhoto(request.Photo, cancellationToken);
+        var result = await repository.CreatePhoto(request.Photo, cancellationToken);
 
-        return new Result<Photo>();
+        
+        return result;
     }
 }

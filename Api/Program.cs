@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
-//app.AddGlobalExceptionHandling();
+app.AddGlobalExceptionHandling();
 
 app.RegisterEndpointDefinitions();
 

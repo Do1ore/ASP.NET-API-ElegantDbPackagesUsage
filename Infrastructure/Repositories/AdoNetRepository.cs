@@ -105,7 +105,7 @@ public class AdoNetRepository : IDatabaseRepository
 
         var commandText = """
         UPDATE public."Photos"
-        SET "PhotoName" = @PhotoName, AbsolutePath" = @AbsolutePath, "FileExtension" = @FileExtension
+        SET "PhotoName" = @PhotoName, "AbsolutePath" = @AbsolutePath, "FileExtension" = @FileExtension
         WHERE "Id" = @Id
         RETURNING "Id", "PhotoName", "AbsolutePath", "FileExtension"
         """;

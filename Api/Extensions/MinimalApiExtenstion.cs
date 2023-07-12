@@ -43,12 +43,11 @@ public static class MinimalApiExtenstion
             {
                 await next();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
-                var errorModel = new ErrorModel(context.Response.StatusCode, "Internal server error occured");
+                var errorModel = new ErrorModel(context.Response.StatusCode, ex.Message);
                 await context.Response.WriteAsJsonAsync(errorModel);
-                throw;
             }
         });
     }
@@ -66,7 +65,7 @@ public static class MinimalApiExtenstion
         {
             "efcore" => RepositoryType.EfCore,
             "adonet" => RepositoryType.AdoNet,
-            _ => throw new ArgumentException($"Type {stringRepositoryType} is not exists for repository")
+            _ => throw new ArgumentException($"Type [{stringRepositoryType}] is unknown.")
         };
     }
 }
