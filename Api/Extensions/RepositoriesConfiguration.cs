@@ -5,8 +5,9 @@ namespace Api.Extensions;
 
 public static class RepositoriesConfiguration
 {
-    public static void AddEfCoreCustomRepository(this IServiceCollection services)
+    public static void AddCustomRepositories(this IServiceCollection services)
     {
         services.AddScoped(typeof(IDatabaseRepository<EfCoreRepository>), typeof(EfCoreRepository));
+        services.AddScoped(typeof(IDatabaseRepository<AdoNetRepository>), typeof(AdoNetRepository));
     }
 }

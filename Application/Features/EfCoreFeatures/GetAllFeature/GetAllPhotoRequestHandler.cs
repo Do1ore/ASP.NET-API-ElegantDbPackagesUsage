@@ -19,6 +19,7 @@ public class GetAllPhotosRequestHandler : IRequestHandler<GetAllPhotosRequest, R
     {
         var result = await _repository.GetAllPhotos(cancellationToken);
 
+
         return result;
     }
 }

@@ -11,6 +11,7 @@
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
       <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
       <PackageReference Include="MediatR" Version="12.1.0" />
+      <PackageReference Include="SD.LLBLGen.Pro.DQE.PostgreSql" Version="5.10.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,5 +1,3 @@
-using System.Net.Mime;
-using System.Reflection;
 using Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +12,7 @@ builder.Services.AddAndConfigureMediatR();
 builder.Services.ConfigureDatabase(builder.Configuration);
 
 //Repositories
-builder.Services.AddEfCoreCustomRepository();
+builder.Services.AddCustomRepositories();
 
 builder.Services.AddValidators();
 
