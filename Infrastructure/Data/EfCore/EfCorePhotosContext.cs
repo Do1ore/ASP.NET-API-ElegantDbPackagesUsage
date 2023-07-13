@@ -24,5 +24,5 @@ public class EfCorePhotosContext : DbContext
 
     public DbSet<Photo>? Photos { get; set; }
 
-    public DbSet<Photographer> Photographers { get; set; }
+    public DbSet<Photographer>? Photographers { get; set; }
 }
