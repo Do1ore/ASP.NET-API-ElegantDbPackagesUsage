@@ -9,7 +9,7 @@ public class EfCorePhotosContext : DbContext
     {
     }
 
-    public EfCorePhotosContext(DbContextOptions options) : base(options)
+    public EfCorePhotosContext(DbContextOptions<EfCorePhotosContext> options) : base(options)
     {
     }
 
@@ -23,4 +23,6 @@ public class EfCorePhotosContext : DbContext
     }
 
     public DbSet<Photo>? Photos { get; set; }
+
+    public DbSet<Photographer> Photographers { get; set; }
 }
