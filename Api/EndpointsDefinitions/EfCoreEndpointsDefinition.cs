@@ -1,6 +1,7 @@
 using Api.Abstractions;
 using Api.DTOs;
 using Api.Extensions;
+using Api.Helpers;
 using Application.Features.EfCoreFeatures.AddFeature;
 using Application.Features.EfCoreFeatures.DeleteFeature;
 using Application.Features.EfCoreFeatures.GetAllFeature;
@@ -48,6 +49,8 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     private async Task<IResult> CreatePhoto(IMediator mediator, string repositoryName, PhotoDto photoDto,
         CancellationToken token)
     {
+        DtoHelper.CheckOrGenerateEntityKey(ref photoDto);
+        
         var result = await mediator.Send(new AddPhotoRequest(photoDto, repositoryName.ToRepositoryType()), token);
         return result.Match<IResult>(TypedResults.Ok, exception =>
             TypedResults.BadRequest(new ErrorModel(
