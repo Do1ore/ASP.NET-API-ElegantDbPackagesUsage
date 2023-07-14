@@ -13,14 +13,14 @@ public record Photo
         PhotographerId = Guid.Empty;
     }
 
-    public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Photographer photographer)
-    {
-        Id = id;
-        PhotoName = photoName;
-        AbsolutePath = absolutePath;
-        FileExtension = fileExtension;
-        Photographer = photographer;
-    }
+    // public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Photographer photographer)
+    // {
+    //     Id = id;
+    //     PhotoName = photoName;
+    //     AbsolutePath = absolutePath;
+    //     FileExtension = fileExtension;
+    //     Photographer = photographer;
+    // }
 
     public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Guid photographerId)
     {
@@ -35,8 +35,6 @@ public record Photo
     public string PhotoName { get; init; }
     public string AbsolutePath { get; init; }
     public string FileExtension { get; init; }
-
-    [ForeignKey("Photographer")] public Guid PhotographerId { get; set; }
-
-    public Photographer? Photographer { get; set; }
+    [ForeignKey("Photographer")] public Guid? PhotographerId { get; init; }
+    // public Photographer? Photographer { get; set; }
 };

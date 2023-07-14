@@ -18,6 +18,7 @@ public class PhotoDto
             PhotoName = photoDto.PhotoName,
             AbsolutePath = photoDto.AbsolutePath,
             FileExtension = photoDto.FileExtension
+
         };
     }
 }
