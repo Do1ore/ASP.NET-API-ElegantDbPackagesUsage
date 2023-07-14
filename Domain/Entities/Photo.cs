@@ -36,5 +36,5 @@ public record Photo
     public string AbsolutePath { get; init; }
     public string FileExtension { get; init; }
     [ForeignKey("Photographer")] public Guid? PhotographerId { get; init; }
-    // public Photographer? Photographer { get; set; }
+    public Photographer? Photographer { get; set; }
 };
