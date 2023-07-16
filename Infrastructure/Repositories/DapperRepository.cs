@@ -1,5 +1,4 @@
 using System.Data;
-using System.Text.RegularExpressions;
 using Dapper;
 using Domain.Entities;
 using Infrastructure.Abstractions;
@@ -33,7 +32,7 @@ public class DapperRepository : IDatabaseRepository
         FROM public."Photos" p
         WHERE p."Id" = @id;
         """;
-        var commandParameters = new { id = id };
+        var commandParameters = new { id };
 
         var result = await _dbConnection.QueryFirstAsync<Photo>(commandText, commandParameters);
         return result;
@@ -79,11 +78,11 @@ public class DapperRepository : IDatabaseRepository
         DELETE FROM public."Photos"
         WHERE "Id" = @Id;
         """;
-        var commandParameters = new { id = id };
+        var commandParameters = new { id };
         var result = await _dbConnection.ExecuteAsync(commandText, commandParameters);
         if (result < 1)
         {
-            return new Result<int>(new ArgumentException("Entity with given parameters cannot be updated"));
+            return new Result<int>(new ArgumentException("Entity with this key is not exists"));
         }
 
         return result;
@@ -97,7 +96,7 @@ public class DapperRepository : IDatabaseRepository
         WHERE p."Id" = @Id
         """;
 
-        var commandParameters = new { id = id };
+        var commandParameters = new { id };
         var result = await _dbConnection.QueryAsync<Photo>(commandText, commandParameters);
         if (result.Count() < 0)
         {

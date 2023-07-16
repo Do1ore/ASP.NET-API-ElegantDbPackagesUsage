@@ -2,7 +2,7 @@ using System.Reflection;
 using Api.Abstractions;
 using Application.Features.AddFeature;
 using Application.Features.UpdateFeature;
-using Domain.Entities;
+using Domain.Common;
 using FluentValidation;
 using Infrastructure.Enums;
 

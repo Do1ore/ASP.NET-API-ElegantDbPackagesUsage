@@ -7,6 +7,7 @@ using Application.Features.DeleteFeature;
 using Application.Features.GetAllFeature;
 using Application.Features.GetByIdFeature;
 using Application.Features.UpdateFeature;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -16,7 +17,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
 {
     public void RegisterEndpoints(WebApplication app)
     {
-        var photos = app.MapGroup("api/v1/photos/");
+        var photos = app.MapGroup("api/v1/photos");
 
         photos.MapGet("/", GetAllPhotos);
 
