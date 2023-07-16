@@ -18,13 +18,13 @@ public class EfCoreRepository : IDatabaseRepository
 
     public async Task<Result<List<Photo>>> GetAllPhotos(CancellationToken cancellationToken)
     {
-        var result = await _db.Photos!.ToListAsync(cancellationToken);
+        var result = await _db!.Photos!.ToListAsync(cancellationToken);
         return new Result<List<Photo>>(result);
     }
 
     public async Task<Result<Photo>> GetPhotoById(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _db.Photos!.FindAsync(id);
+        var result = await _db!.Photos!.FindAsync(id);
         if (result.IsNull())
         {
             return new Result<Photo>(new KeyNotFoundException("Value with this key is not exists."));
@@ -35,7 +35,7 @@ public class EfCoreRepository : IDatabaseRepository
 
     public async Task<Result<Photo>> CreatePhoto(Photo photo, CancellationToken cancellationToken)
     {
-        var result = await _db.Photos!
+        var result = await _db!.Photos!
             .AddAsync(photo, cancellationToken);
         if (result.State != EntityState.Added)
         {
