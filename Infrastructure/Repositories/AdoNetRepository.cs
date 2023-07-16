@@ -1,4 +1,3 @@
-using System.Data;
 using Domain.Entities;
 using Infrastructure.Abstractions;
 using LanguageExt.Common;
@@ -21,7 +20,7 @@ public class AdoNetRepository : IDatabaseRepository
     {
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
-        var commandText = """
+        const string commandText = """
         SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
         FROM public."Photos";
         """;
@@ -47,7 +46,7 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
         FROM public."Photos" p
         WHERE p."Id" = @id
@@ -77,7 +76,7 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         INSERT INTO public."Photos" ("Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId")
         VALUES (@Id, @PhotoName, @AbsolutePath, @FileExtension, @PhotographerId)
         RETURNING "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
@@ -108,7 +107,7 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         UPDATE public."Photos"
         SET "PhotoName" = @PhotoName, "AbsolutePath" = @AbsolutePath, 
         "FileExtension" = @FileExtension, "PhotographerId" = @PhotographerId
@@ -142,7 +141,7 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         DELETE FROM public."Photos"
         WHERE "Id" = @Id;
         """;
@@ -164,7 +163,7 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         SELECT COUNT(*)
         FROM public."Photos"
         WHERE "Id" = @Id

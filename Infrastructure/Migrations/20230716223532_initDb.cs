@@ -6,18 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class photographer : Migration
+    public partial class initDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "PhotographerId",
-                table: "Photos",
-                type: "uuid",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
             migrationBuilder.CreateTable(
                 name: "Photographers",
                 columns: table => new
@@ -31,37 +24,40 @@ namespace Infrastructure.Migrations
                     table.PrimaryKey("PK_Photographers", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PhotoName = table.Column<string>(type: "text", nullable: false),
+                    AbsolutePath = table.Column<string>(type: "text", nullable: false),
+                    FileExtension = table.Column<string>(type: "text", nullable: false),
+                    PhotographerId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photos_Photographers_PhotographerId",
+                        column: x => x.PhotographerId,
+                        principalTable: "Photographers",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_PhotographerId",
                 table: "Photos",
                 column: "PhotographerId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Photos_Photographers_PhotographerId",
-                table: "Photos",
-                column: "PhotographerId",
-                principalTable: "Photographers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Photos_Photographers_PhotographerId",
-                table: "Photos");
+            migrationBuilder.DropTable(
+                name: "Photos");
 
             migrationBuilder.DropTable(
                 name: "Photographers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Photos_PhotographerId",
-                table: "Photos");
-
-            migrationBuilder.DropColumn(
-                name: "PhotographerId",
-                table: "Photos");
         }
     }
 }

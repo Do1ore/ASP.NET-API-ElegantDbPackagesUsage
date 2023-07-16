@@ -59,6 +59,18 @@ namespace Application.Factories
 
                     return Task.FromResult<IDatabaseRepository>(efCoreRepository);
 
+                case RepositoryType.Dapper:
+                    var dbContext = _serviceProvider.GetService<IDbContext>();
+
+                    if (dbContext is null)
+                    {
+                        throw new ApplicationException($"Service {nameof(IDbContext)} not found");
+                    }
+
+                    var dapperRepository = new DapperRepository(dbContext);
+
+                    return Task.FromResult<IDatabaseRepository>(dapperRepository);
+
                 default:
                     throw new ApplicationException($"Service {repositoryType.ToString()} not found");
             }

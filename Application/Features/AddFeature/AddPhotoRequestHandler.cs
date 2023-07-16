@@ -2,7 +2,7 @@ using Application.Contracts;
 using FluentValidation;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
-namespace Application.Features.EfCoreFeatures.AddFeature;
+namespace Application.Features.AddFeature;
 
 public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Photo>>
 {

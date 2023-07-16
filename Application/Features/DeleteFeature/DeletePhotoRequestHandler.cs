@@ -1,8 +1,6 @@
 using Application.Contracts;
-using Infrastructure.Abstractions;
-using Infrastructure.Repositories;
 
-namespace Application.Features.EfCoreFeatures.DeleteFeature;
+namespace Application.Features.DeleteFeature;
 
 public class DeletePhotoRequestHandler : IRequestHandler<DeletePhotoRequest, Result<int>>
 {
