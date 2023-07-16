@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Features.EfCoreFeatures.UpdateFeature;
+namespace Application.Features.UpdateFeature;
 
 public class UpdatePhotoRequestValidator : AbstractValidator<UpdatePhotoRequest>
 {

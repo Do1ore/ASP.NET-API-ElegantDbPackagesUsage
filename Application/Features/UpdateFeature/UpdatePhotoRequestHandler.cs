@@ -1,9 +1,7 @@
 using Application.Contracts;
 using FluentValidation;
-using Infrastructure.Abstractions;
-using Infrastructure.Repositories;
 
-namespace Application.Features.EfCoreFeatures.UpdateFeature;
+namespace Application.Features.UpdateFeature;
 
 public class UpdatePhotoRequestHandler : IRequestHandler<UpdatePhotoRequest, Result<Photo>>
 {

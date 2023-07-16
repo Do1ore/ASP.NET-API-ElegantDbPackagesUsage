@@ -1,8 +1,6 @@
 using Application.Contracts;
-using Infrastructure.Abstractions;
-using Infrastructure.Repositories;
 
-namespace Application.Features.EfCoreFeatures.GetAllFeature;
+namespace Application.Features.GetAllFeature;
 
 public class GetAllPhotosRequestHandler : IRequestHandler<GetAllPhotosRequest, Result<List<Photo>>>
 {

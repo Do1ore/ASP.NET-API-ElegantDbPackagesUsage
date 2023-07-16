@@ -2,11 +2,11 @@ using Api.Abstractions;
 using Api.DTOs;
 using Api.Extensions;
 using Api.Helpers;
-using Application.Features.EfCoreFeatures.AddFeature;
-using Application.Features.EfCoreFeatures.DeleteFeature;
-using Application.Features.EfCoreFeatures.GetAllFeature;
-using Application.Features.EfCoreFeatures.GetByIdFeature;
-using Application.Features.EfCoreFeatures.UpdateFeature;
+using Application.Features.AddFeature;
+using Application.Features.DeleteFeature;
+using Application.Features.GetAllFeature;
+using Application.Features.GetByIdFeature;
+using Application.Features.UpdateFeature;
 using Domain.Entities;
 using MediatR;
 

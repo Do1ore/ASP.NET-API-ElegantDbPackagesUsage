@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text.RegularExpressions;
 using Dapper;
 using Domain.Entities;
 using Infrastructure.Abstractions;
@@ -17,36 +18,92 @@ public class DapperRepository : IDatabaseRepository
 
     public async Task<Result<List<Photo>>> GetAllPhotos(CancellationToken cancellationToken)
     {
-        var commandText = """
+        const string commandText = """
         SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
         FROM public."Photos";
         """;
-        var result = await _dbConnection.QueryAsync<Photo>(commandText);
+        var result = await _dbConnection.QueryAsync<Photo>(commandText, cancellationToken);
         return result.ToList();
     }
 
-    public Task<Result<Photo>> GetPhotoById(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<Photo>> GetPhotoById(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        const string commandText = """
+        SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
+        FROM public."Photos" p
+        WHERE p."Id" = @id;
+        """;
+        var commandParameters = new { id = id };
+
+        var result = await _dbConnection.QueryFirstAsync<Photo>(commandText, commandParameters);
+        return result;
     }
 
-    public Task<Result<Photo>> CreatePhoto(Photo photo, CancellationToken cancellationToken)
+    public async Task<Result<Photo>> CreatePhoto(Photo photo, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        const string commandText = """
+        INSERT INTO public."Photos" ("Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId")
+        VALUES (@Id, @PhotoName, @AbsolutePath, @FileExtension, @PhotographerId)
+        RETURNING "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
+        """;
+        var result = await _dbConnection.ExecuteAsync(commandText, photo);
+        if (result < 1)
+        {
+            return new Result<Photo>(new ArgumentException("Entity with given parameters cannot be created"));
+        }
+
+        return photo;
     }
 
-    public Task<Result<Photo>> UpdatePhoto(Photo photo, CancellationToken cancellationToken)
+    public async Task<Result<Photo>> UpdatePhoto(Photo photo, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        const string commandText = """
+        UPDATE public."Photos"
+        SET "PhotoName" = @PhotoName, "AbsolutePath" = @AbsolutePath, 
+        "FileExtension" = @FileExtension, "PhotographerId" = @PhotographerId
+        WHERE "Id" = @Id
+        RETURNING "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
+        """;
+        var result = await _dbConnection.ExecuteAsync(commandText, photo);
+        if (result < 1)
+        {
+            return new Result<Photo>(new ArgumentException("Entity with given parameters cannot be updated"));
+        }
+
+        return photo;
     }
 
-    public Task<Result<int>> DeletePhoto(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<int>> DeletePhoto(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        const string commandText = """
+        DELETE FROM public."Photos"
+        WHERE "Id" = @Id;
+        """;
+        var commandParameters = new { id = id };
+        var result = await _dbConnection.ExecuteAsync(commandText, commandParameters);
+        if (result < 1)
+        {
+            return new Result<int>(new ArgumentException("Entity with given parameters cannot be updated"));
+        }
+
+        return result;
     }
 
-    public Task<bool> IsPhotoExists(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> IsPhotoExists(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        const string commandText = """
+        SELECT COUNT(*)
+        FROM public."Photos" p 
+        WHERE p."Id" = @Id
+        """;
+
+        var commandParameters = new { id = id };
+        var result = await _dbConnection.QueryAsync<Photo>(commandText, commandParameters);
+        if (result.Count() < 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

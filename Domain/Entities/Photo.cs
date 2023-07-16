@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-public record Photo
+public record Photo 
 {
     public Photo()
     {
@@ -13,14 +13,14 @@ public record Photo
         PhotographerId = Guid.Empty;
     }
 
-    // public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Photographer photographer)
-    // {
-    //     Id = id;
-    //     PhotoName = photoName;
-    //     AbsolutePath = absolutePath;
-    //     FileExtension = fileExtension;
-    //     Photographer = photographer;
-    // }
+    public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Photographer photographer)
+    {
+        Id = id;
+        PhotoName = photoName;
+        AbsolutePath = absolutePath;
+        FileExtension = fileExtension;
+        Photographer = photographer;
+    }
 
     public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Guid photographerId)
     {
@@ -31,10 +31,14 @@ public record Photo
         PhotographerId = photographerId;
     }
 
-    public Guid Id { get; init; }
-    public string PhotoName { get; init; }
-    public string AbsolutePath { get; init; }
-    public string FileExtension { get; init; }
-    [ForeignKey("Photographer")] public Guid? PhotographerId { get; init; }
+    [Column("Id")] public Guid Id { get; init; }
+    [Column("PhotoName")] public string PhotoName { get; init; }
+    [Column("AbsolutePath")] public string AbsolutePath { get; init; }
+    [Column("FileExtension")] public string FileExtension { get; init; }
+
+    [Column("PhotographerId")]
+    [ForeignKey("Photographer")]
+    public Guid? PhotographerId { get; init; }
+
     public Photographer? Photographer { get; set; }
 };
