@@ -1,0 +1,44 @@
+version: '3.4'
+
+networks:
+  hyperlink:
+    driver: bridge
+services:
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    networks:
+     - hyperlink
+    depends_on: 
+     - db_server
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:80
+      - ConnectionStrings__PostgreSQLConnection=User ID=postgres;Password=postgre;Server=db_server;Port=5432;Database=MultiOperation;Pooling=true;
+    ports:
+      - "8080:80"
+    
+  
+  db_server:
+    networks:
+      - hyperlink
+    image: postgres:latest
+    container_name: db_server
+    user: root
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgre
+      - POSTGRES_DB=MultiOperation
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+
+    
+volumes: 
+  db-data:

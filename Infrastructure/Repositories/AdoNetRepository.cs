@@ -20,8 +20,8 @@ public class AdoNetRepository : IDatabaseRepository
     {
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
-        var commandText = """
-        SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension"
+        const string commandText = """
+        SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
         FROM public."Photos";
         """;
 
@@ -34,7 +34,8 @@ public class AdoNetRepository : IDatabaseRepository
             var photoName = reader.GetString(1);
             var absolutePath = reader.GetString(2);
             var fileExtenstion = reader.GetString(3);
-            result.Add(new Photo(id, photoName, absolutePath, fileExtenstion));
+            var photographerId = reader.GetGuid(4);
+            result.Add(new Photo(id, photoName, absolutePath, fileExtenstion, photographerId));
         }
 
         return result;
@@ -45,8 +46,8 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
-        SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension"
+        const string commandText = """
+        SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
         FROM public."Photos" p
         WHERE p."Id" = @id
         """;
@@ -63,7 +64,8 @@ public class AdoNetRepository : IDatabaseRepository
             var photoName = reader.GetString(1);
             var absolutePath = reader.GetString(2);
             var fileExtenstion = reader.GetString(3);
-            result = new Photo(photoId, photoName, absolutePath, fileExtenstion);
+            var photographerId = reader.GetGuid(4);
+            result = new Photo(photoId, photoName, absolutePath, fileExtenstion, photographerId);
         }
 
         return result;
@@ -74,17 +76,18 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = $@"
-        INSERT INTO public.""Photos"" (""Id"", ""PhotoName"", ""AbsolutePath"", ""FileExtension"")
-        VALUES (@Id, @PhotoName, @AbsolutePath, @FileExtension)
-        RETURNING ""Id"", ""PhotoName"", ""AbsolutePath"", ""FileExtension""";
+        const string commandText = """
+        INSERT INTO public."Photos" ("Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId")
+        VALUES (@Id, @PhotoName, @AbsolutePath, @FileExtension, @PhotographerId)
+        RETURNING "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
+        """;
 
         await using var command = new NpgsqlCommand(commandText, connection);
         command.Parameters.AddWithValue("@Id", photo.Id);
         command.Parameters.AddWithValue("@PhotoName", photo.PhotoName);
         command.Parameters.AddWithValue("@AbsolutePath", photo.AbsolutePath);
         command.Parameters.AddWithValue("@FileExtension", photo.FileExtension);
-
+        command.Parameters.AddWithValue("@PhotographerId", photo.PhotographerId);
         var reader = await command.ExecuteReaderAsync(cancellationToken);
         if (await reader.ReadAsync(cancellationToken))
         {
@@ -92,7 +95,8 @@ public class AdoNetRepository : IDatabaseRepository
             var photoName = reader.GetString(1);
             var absolutePath = reader.GetString(2);
             var fileExtension = reader.GetString(3);
-            return new Photo(id, photoName, absolutePath, fileExtension);
+            var photographerId = reader.GetGuid(4);
+            return new Photo(id, photoName, absolutePath, fileExtension, photographerId);
         }
 
         return new Result<Photo>(new ArgumentException("Failed to create photo."));
@@ -103,11 +107,12 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         UPDATE public."Photos"
-        SET "PhotoName" = @PhotoName, "AbsolutePath" = @AbsolutePath, "FileExtension" = @FileExtension
+        SET "PhotoName" = @PhotoName, "AbsolutePath" = @AbsolutePath, 
+        "FileExtension" = @FileExtension, "PhotographerId" = @PhotographerId
         WHERE "Id" = @Id
-        RETURNING "Id", "PhotoName", "AbsolutePath", "FileExtension"
+        RETURNING "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
         """;
 
         await using var command = new NpgsqlCommand(commandText, connection);
@@ -115,6 +120,7 @@ public class AdoNetRepository : IDatabaseRepository
         command.Parameters.AddWithValue("@PhotoName", photo.PhotoName);
         command.Parameters.AddWithValue("@AbsolutePath", photo.AbsolutePath);
         command.Parameters.AddWithValue("@FileExtension", photo.FileExtension);
+        command.Parameters.AddWithValue("@PhotographerId", photo.PhotographerId);
 
         var reader = await command.ExecuteReaderAsync(cancellationToken);
         if (await reader.ReadAsync(cancellationToken))
@@ -123,7 +129,8 @@ public class AdoNetRepository : IDatabaseRepository
             var photoName = reader.GetString(1);
             var absolutePath = reader.GetString(2);
             var fileExtension = reader.GetString(3);
-            return new Photo(id, photoName, absolutePath, fileExtension);
+            var photographerId = reader.GetGuid(4);
+            return new Photo(id, photoName, absolutePath, fileExtension, photographerId);
         }
 
         return new Result<Photo>(new ArgumentException("Failed to update photo."));
@@ -134,7 +141,7 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         DELETE FROM public."Photos"
         WHERE "Id" = @Id;
         """;
@@ -156,7 +163,7 @@ public class AdoNetRepository : IDatabaseRepository
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        var commandText = """
+        const string commandText = """
         SELECT COUNT(*)
         FROM public."Photos"
         WHERE "Id" = @Id

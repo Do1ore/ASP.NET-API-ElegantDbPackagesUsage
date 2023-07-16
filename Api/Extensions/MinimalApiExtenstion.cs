@@ -1,10 +1,8 @@
 using System.Reflection;
 using Api.Abstractions;
-using Api.DTOs;
-using Application.Features.EfCoreFeatures;
-using Application.Features.EfCoreFeatures.AddFeature;
-using Application.Features.EfCoreFeatures.UpdateFeature;
-using Domain.Entities;
+using Application.Features.AddFeature;
+using Application.Features.UpdateFeature;
+using Domain.Common;
 using FluentValidation;
 using Infrastructure.Enums;
 
@@ -65,6 +63,7 @@ public static class MinimalApiExtenstion
         {
             "efcore" => RepositoryType.EfCore,
             "adonet" => RepositoryType.AdoNet,
+            "dapper" => RepositoryType.Dapper,
             _ => throw new ArgumentException($"Type [{stringRepositoryType}] is unknown.")
         };
     }

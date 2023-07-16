@@ -9,18 +9,20 @@ public class EfCorePhotosContext : DbContext
     {
     }
 
-    public EfCorePhotosContext(DbContextOptions options) : base(options)
+    public EfCorePhotosContext(DbContextOptions<EfCorePhotosContext> options) : base(options)
     {
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseNpgsql(
-                "Server=localhost;Port=5432;Database=MultiOperation;Username=postgres;Password=postgre;Integrated Security=true;Pooling=true;");
-        }
+        // if (!optionsBuilder.IsConfigured)
+        // {
+        //     optionsBuilder.UseNpgsql(
+        //         "User ID=postgres;Password=postgre;Server=localhost;Port=5433;Database=MultiOperation;Pooling=true");
+        // }
     }
 
     public DbSet<Photo>? Photos { get; set; }
+
+    public DbSet<Photographer>? Photographers { get; set; }
 }

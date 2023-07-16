@@ -4,10 +4,12 @@ namespace Api.DTOs;
 
 public class PhotoDto
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; set; }
     public string PhotoName { get; init; } = string.Empty;
     public string AbsolutePath { get; init; } = string.Empty;
     public string FileExtension { get; init; } = string.Empty;
+        
+    public Guid? PhotographerId { get; set; } = Guid.Parse("bec9fa90-8ab6-4d87-91ce-22291c165d84");
 
 
     public static implicit operator Photo(PhotoDto photoDto)
@@ -17,7 +19,8 @@ public class PhotoDto
             Id = photoDto.Id,
             PhotoName = photoDto.PhotoName,
             AbsolutePath = photoDto.AbsolutePath,
-            FileExtension = photoDto.FileExtension
+            FileExtension = photoDto.FileExtension,
+            PhotographerId = photoDto.PhotographerId
         };
     }
 }

@@ -1,8 +1,8 @@
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-public record Photo
+public record Photo 
 {
     public Photo()
     {
@@ -10,26 +10,35 @@ public record Photo
         PhotoName = string.Empty;
         AbsolutePath = string.Empty;
         FileExtension = string.Empty;
+        PhotographerId = Guid.Empty;
     }
 
-    public Photo(Guid Id, string PhotoName, string AbsolutePath, string FileExtension)
+    public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Photographer photographer)
     {
-        this.Id = Id;
-        this.PhotoName = PhotoName;
-        this.AbsolutePath = AbsolutePath;
-        this.FileExtension = FileExtension;
+        Id = id;
+        PhotoName = photoName;
+        AbsolutePath = absolutePath;
+        FileExtension = fileExtension;
+        Photographer = photographer;
     }
 
-    public Guid Id { get; init; }
-    public string PhotoName { get; init; }
-    public string AbsolutePath { get; init; }
-    public string FileExtension { get; init; }
-
-    public void Deconstruct(out Guid Id, out string PhotoName, out string AbsolutePath, out string FileExtension)
+    public Photo(Guid id, string photoName, string absolutePath, string fileExtension, Guid photographerId)
     {
-        Id = this.Id;
-        PhotoName = this.PhotoName;
-        AbsolutePath = this.AbsolutePath;
-        FileExtension = this.FileExtension;
+        Id = id;
+        PhotoName = photoName;
+        AbsolutePath = absolutePath;
+        FileExtension = fileExtension;
+        PhotographerId = photographerId;
     }
+
+    [Column("Id")] public Guid Id { get; init; }
+    [Column("PhotoName")] public string PhotoName { get; init; }
+    [Column("AbsolutePath")] public string AbsolutePath { get; init; }
+    [Column("FileExtension")] public string FileExtension { get; init; }
+
+    [Column("PhotographerId")]
+    [ForeignKey("Photographer")]
+    public Guid? PhotographerId { get; init; }
+
+    public Photographer? Photographer { get; set; }
 };

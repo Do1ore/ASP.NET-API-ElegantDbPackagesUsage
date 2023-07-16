@@ -10,7 +10,7 @@ builder.Services.AddAndConfigureMediatR();
 
 //Database configuration 
 builder.Services.ConfigureDatabase(builder.Configuration);
-
+builder.Services.ConfigureDapper(builder.Configuration);
 //Repositories
 builder.Services.AddCustomRepositories();
 
@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
-app.AddGlobalExceptionHandling();
+//app.AddGlobalExceptionHandling();
 
 app.RegisterEndpointDefinitions();
 

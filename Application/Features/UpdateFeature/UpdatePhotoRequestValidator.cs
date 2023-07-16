@@ -1,13 +1,14 @@
 using FluentValidation;
 
-namespace Application.Features.EfCoreFeatures.AddFeature;
+namespace Application.Features.UpdateFeature;
 
-public class AddPhotoRequestValidator : AbstractValidator<AddPhotoRequest>
+public class UpdatePhotoRequestValidator : AbstractValidator<UpdatePhotoRequest>
 {
-    public AddPhotoRequestValidator()
+    public UpdatePhotoRequestValidator()
     {
-        RuleFor(a => a.Photo.PhotoName).Must(
-            l => l.All(char.IsLetter)).WithMessage("Photo name must contain only letters");
+        RuleFor(a => a.Photo.PhotoName)
+            .Must(l => l.All(char.IsLetter))
+            .WithMessage("Photo name must contain only letters");
 
         RuleFor(a => a.Photo.FileExtension)
             .NotEmpty()

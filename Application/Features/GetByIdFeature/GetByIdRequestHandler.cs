@@ -1,8 +1,6 @@
 using Application.Contracts;
-using Infrastructure.Abstractions;
-using Infrastructure.Repositories;
 
-namespace Application.Features.EfCoreFeatures.GetByIdFeature;
+namespace Application.Features.GetByIdFeature;
 
 public class GetByIdRequestHandler : IRequestHandler<GetByIdRequest, Result<Photo>>
 {

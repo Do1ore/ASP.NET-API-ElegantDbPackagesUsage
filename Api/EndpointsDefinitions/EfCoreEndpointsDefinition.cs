@@ -1,11 +1,13 @@
 using Api.Abstractions;
 using Api.DTOs;
 using Api.Extensions;
-using Application.Features.EfCoreFeatures.AddFeature;
-using Application.Features.EfCoreFeatures.DeleteFeature;
-using Application.Features.EfCoreFeatures.GetAllFeature;
-using Application.Features.EfCoreFeatures.GetByIdFeature;
-using Application.Features.EfCoreFeatures.UpdateFeature;
+using Api.Helpers;
+using Application.Features.AddFeature;
+using Application.Features.DeleteFeature;
+using Application.Features.GetAllFeature;
+using Application.Features.GetByIdFeature;
+using Application.Features.UpdateFeature;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 
@@ -15,7 +17,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
 {
     public void RegisterEndpoints(WebApplication app)
     {
-        var photos = app.MapGroup("api/v1/photos/");
+        var photos = app.MapGroup("api/v1/photos");
 
         photos.MapGet("/", GetAllPhotos);
 
@@ -48,6 +50,8 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     private async Task<IResult> CreatePhoto(IMediator mediator, string repositoryName, PhotoDto photoDto,
         CancellationToken token)
     {
+        DtoHelper.CheckOrGenerateEntityKey(ref photoDto);
+        
         var result = await mediator.Send(new AddPhotoRequest(photoDto, repositoryName.ToRepositoryType()), token);
         return result.Match<IResult>(TypedResults.Ok, exception =>
             TypedResults.BadRequest(new ErrorModel(
