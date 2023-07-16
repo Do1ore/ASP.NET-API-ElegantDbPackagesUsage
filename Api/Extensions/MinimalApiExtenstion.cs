@@ -65,6 +65,7 @@ public static class MinimalApiExtenstion
         {
             "efcore" => RepositoryType.EfCore,
             "adonet" => RepositoryType.AdoNet,
+            "dapper" => RepositoryType.Dapper,
             _ => throw new ArgumentException($"Type [{stringRepositoryType}] is unknown.")
         };
     }

@@ -1,4 +1,3 @@
-using System.Data;
 using Domain.Entities;
 using Infrastructure.Abstractions;
 using LanguageExt.Common;
