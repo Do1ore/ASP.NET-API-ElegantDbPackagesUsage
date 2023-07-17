@@ -3,6 +3,7 @@ version: '3.4'
 networks:
   hyperlink:
     driver: bridge
+
 services:
   api:
     image: ${DOCKER_REGISTRY-}api
@@ -10,9 +11,10 @@ services:
       context: .
       dockerfile: Api/Dockerfile
     networks:
-     - hyperlink
-    depends_on: 
-     - db_server
+      - hyperlink
+    depends_on:
+      - db_server
+      - redis
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -20,7 +22,7 @@ services:
       - ConnectionStrings__PostgreSQLConnection=User ID=postgres;Password=postgre;Server=db_server;Port=5432;Database=MultiOperation;Pooling=true;
     ports:
       - "8080:80"
-    
+  
   
   db_server:
     networks:
@@ -29,7 +31,7 @@ services:
     container_name: db_server
     user: root
     ports:
-      - 5433:5432
+      - "5433:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgre
@@ -37,8 +39,33 @@ services:
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data
+  
+  redis:
+    image: redis:latest
+    command: redis-server
+    volumes:
+      - redis:/var/lib/redis
+      - redis-config:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    networks:
+      - hyperlink
+  
+  
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=root
+      - HTTP_PASSWORD=qwerty
+    ports:
+      - "8081:8081"
+    networks:
+      - hyperlink
+    depends_on:
+      - redis
 
-
-    
-volumes: 
+volumes:
   db-data:
+  redis:
+  redis-config:
