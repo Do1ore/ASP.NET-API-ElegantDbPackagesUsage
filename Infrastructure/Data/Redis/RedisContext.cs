@@ -19,4 +19,5 @@ public class RedisContext : IRedisContext
         ConnectionMultiplexer connect = ConnectionMultiplexer.Connect(_connectionString);
         return connect;
     }
+
 }

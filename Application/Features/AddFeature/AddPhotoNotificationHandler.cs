@@ -13,7 +13,7 @@ public class AddPhotoNotificationHandler : INotificationHandler<AddPhotoNotifica
 
     public async Task Handle(AddPhotoNotification notification, CancellationToken cancellationToken)
     {
-        var result = await _redisService.Create(notification.Photo.Id, notification.Photo, cancellationToken);
+        var result = await _redisService.SetValue(notification.Photo.Id, notification.Photo);
         if (result.IsFaulted)
         {
             //log

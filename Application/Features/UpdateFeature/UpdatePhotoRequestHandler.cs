@@ -7,12 +7,15 @@ public class UpdatePhotoRequestHandler : IRequestHandler<UpdatePhotoRequest, Res
 {
     private readonly IRepositoryFactory _repositoryFactory;
     private readonly IValidator<UpdatePhotoRequest> _validator;
+    private readonly IMediator _mediator;
 
     public UpdatePhotoRequestHandler(IValidator<UpdatePhotoRequest> validator,
-        IRepositoryFactory repositoryFactory)
+        IRepositoryFactory repositoryFactory,
+        IMediator mediator)
     {
         _validator = validator;
         _repositoryFactory = repositoryFactory;
+        _mediator = mediator;
     }
 
 
@@ -27,6 +30,11 @@ public class UpdatePhotoRequestHandler : IRequestHandler<UpdatePhotoRequest, Res
             return new Result<Photo>(new ArgumentException("Value with this key is not exists"));
 
         var result = await repository.UpdatePhoto(request.Photo, cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            await _mediator.Publish(new UpdatePhotoNotification(request.Photo));
+        }
 
         return result;
     }

@@ -14,23 +14,24 @@ public class RedisService : IRedisService
     public RedisService(IRedisContext redis, IConfiguration configuration)
     {
         _cacheDb = redis.GetConnection().GetDatabase();
+        var a = redis.GetConnection().GetEndPoints();
         var expirationTime = configuration.GetSection("Redis")["DefaultExpirationTimeInMinutes"] ??
                              throw new Exception("Expiration time not found");
         _defaultExpirationTime = Convert.ToInt32(expirationTime);
     }
 
-    public async Task<Result<T>> GetById<T>(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<T>> GetById<T>(Guid id)
     {
-        var value = await _cacheDb.StringGetAsync(id.ToString());
+        var value = await _cacheDb.StringGetSetExpiryAsync(id.ToString(), TimeSpan.FromMinutes(_defaultExpirationTime));
         if (!value.IsNullOrEmpty)
         {
             return JsonSerializer.Deserialize<T>(value);
         }
-
+       
         return new Result<T>(new Exception("Cannot get value"));
     }
 
-    public async Task<Result<T>> Create<T>(Guid id, T value, CancellationToken cancellationToken)
+    public async Task<Result<T>> SetValue<T>(Guid id, T value)
     {
         var valueToAdd = JsonSerializer.Serialize(value);
         var isSucceed =
@@ -44,12 +45,7 @@ public class RedisService : IRedisService
         return new Result<T>(new ApplicationException("Cannot add value to redis storage"));
     }
 
-    public Task<Result<T>> Update<T>(Guid id, T photo, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result<object>> Delete(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<object>> Delete(Guid id)
     {
         if (!await _cacheDb.KeyExistsAsync(id.ToString()))
         {
