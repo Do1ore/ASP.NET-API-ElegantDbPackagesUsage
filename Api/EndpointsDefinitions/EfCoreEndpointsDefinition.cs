@@ -28,6 +28,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
         photos.MapPut("/", UpdatePhoto);
 
         photos.MapDelete("/{id}", DeletePhoto);
+        photos.MapDelete("/zxczxczxczxc{id}", DeletePhoto);
     }
 
 

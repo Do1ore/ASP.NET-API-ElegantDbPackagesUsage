@@ -9,13 +9,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAndConfigureMediatR();
 
 //Database configuration 
-builder.Services.ConfigureDatabase(builder.Configuration);
+builder.Services.ConfigureEfCore(builder.Configuration);
 builder.Services.ConfigureDapper(builder.Configuration);
+builder.Services.ConfigureRedis(builder.Configuration);
 //Repositories
 builder.Services.AddCustomRepositories();
 
-builder.Services.AddValidators();
-
+builder.Services.AddMediatRValidators();
+builder.Services.AddMediatRNotifications();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

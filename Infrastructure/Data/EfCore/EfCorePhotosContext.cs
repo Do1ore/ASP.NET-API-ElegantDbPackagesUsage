@@ -1,4 +1,5 @@
 using Domain.Entities;
+using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.EfCore;
@@ -18,7 +19,7 @@ public class EfCorePhotosContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseNpgsql(
-                "User ID=postgres;Password=postgre;Server=localhost;Port=5433;Database=MultiOperation;Pooling=true");
+                "User ID=postgres;Password=postgre;Server=db_server;Port=5432;Database=MultiOperation;Pooling=true");
         }
     }
 

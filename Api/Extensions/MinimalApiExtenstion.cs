@@ -5,6 +5,7 @@ using Application.Features.UpdateFeature;
 using Domain.Common;
 using FluentValidation;
 using Infrastructure.Enums;
+using MediatR;
 
 namespace Api.Extensions;
 
@@ -50,10 +51,15 @@ public static class MinimalApiExtenstion
         });
     }
 
-    public static void AddValidators(this IServiceCollection services)
+    public static void AddMediatRValidators(this IServiceCollection services)
     {
         services.AddTransient<IValidator<AddPhotoRequest>, AddPhotoRequestValidator>();
         services.AddTransient<IValidator<UpdatePhotoRequest>, UpdatePhotoRequestValidator>();
+    }
+
+    public static void AddMediatRNotifications(this IServiceCollection services)
+    {
+   
     }
 
 

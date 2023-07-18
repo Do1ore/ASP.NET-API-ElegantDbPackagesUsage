@@ -19,6 +19,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:80
+      - ConnectionStrings__RedisConnection=redis:6379
       - ConnectionStrings__PostgreSQLConnection=User ID=postgres;Password=postgre;Server=db_server;Port=5432;Database=MultiOperation;Pooling=true;
     ports:
       - "8080:80"
