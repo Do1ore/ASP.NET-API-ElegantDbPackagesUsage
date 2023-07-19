@@ -34,7 +34,7 @@ public class GetByIdRequestHandler : IRequestHandler<GetByIdRequest, Result<Phot
         {
             await _mediator.Publish(new GetByIdNotification(value), cancellationToken);
             return result;
-        }, ex => Task.FromResult(result));
+        }, _ => Task.FromResult(result));
 
         return result;
     }
