@@ -6,6 +6,8 @@ using Domain.Common;
 using FluentValidation;
 using Infrastructure.Enums;
 using MediatR;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 namespace Api.Extensions;
 
@@ -57,9 +59,32 @@ public static class MinimalApiExtenstion
         services.AddTransient<IValidator<UpdatePhotoRequest>, UpdatePhotoRequestValidator>();
     }
 
-    public static void AddMediatRNotifications(this IServiceCollection services)
+    public static void ConfigureLogging(this IHostBuilder host)
     {
-   
+        host.UseSerilog((context, configuration) =>
+        {
+            var connection = context.Configuration.GetConnectionString("ElasticConnection") ??
+                             throw new Exception("Connection string for elastic search not found");
+
+            configuration.Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .WriteTo.Console()
+                .WriteTo.Elasticsearch(
+                    new ElasticsearchSinkOptions(new Uri(connection))
+                    {
+                        IndexFormat =
+                            $"{context.Configuration["ApplicationName"]}-logs-" +
+                            $"{context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-")}-" +
+                            $"{DateTime.UtcNow:yyyy-MM)}",
+                        AutoRegisterTemplate = true,
+                        NumberOfShards = 2,
+                        NumberOfReplicas = 1,
+                    })
+                .Enrich.WithProperty("Environment",
+                    context.HostingEnvironment.EnvironmentName ??
+                    throw new InvalidOperationException("Environment name not found"))
+                .ReadFrom.Configuration(context.Configuration);
+        });
     }
 
 
@@ -73,4 +98,5 @@ public static class MinimalApiExtenstion
             _ => throw new ArgumentException($"Type [{stringRepositoryType}] is unknown.")
         };
     }
+    
 }
