@@ -8,13 +8,14 @@ public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Ph
 {
     private readonly IValidator<AddPhotoRequest> _validator;
     private readonly IRepositoryFactory _repositoryFactory;
-
+    private readonly IMediator _mediator;
 
     public AddPhotoRequestHandler(
         IRepositoryFactory repositoryFactory,
-        IValidator<AddPhotoRequest> validator)
+        IValidator<AddPhotoRequest> validator, IMediator mediator)
     {
         _validator = validator;
+        _mediator = mediator;
         _repositoryFactory = repositoryFactory;
     }
 
@@ -26,8 +27,13 @@ public class AddPhotoRequestHandler : IRequestHandler<AddPhotoRequest, Result<Ph
 
         var repository = await _repositoryFactory.CreateRepository(request.RepositoryType);
         var result = await repository.CreatePhoto(request.Photo, cancellationToken);
-
         
+        if (result.IsSuccess)
+        {
+            await _mediator.Publish(new AddPhotoNotification(request.Photo), cancellationToken);
+        }
+
+
         return result;
     }
 }

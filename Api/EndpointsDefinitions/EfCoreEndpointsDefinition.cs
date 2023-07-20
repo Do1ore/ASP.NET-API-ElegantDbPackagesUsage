@@ -10,6 +10,7 @@ using Application.Features.UpdateFeature;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
+using Serilog;
 
 namespace Api.EndpointsDefinitions;
 
@@ -28,6 +29,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
         photos.MapPut("/", UpdatePhoto);
 
         photos.MapDelete("/{id}", DeletePhoto);
+        
     }
 
 
@@ -51,12 +53,16 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
         CancellationToken token)
     {
         DtoHelper.CheckOrGenerateEntityKey(ref photoDto);
-        
+
         var result = await mediator.Send(new AddPhotoRequest(photoDto, repositoryName.ToRepositoryType()), token);
         return result.Match<IResult>(TypedResults.Ok, exception =>
-            TypedResults.BadRequest(new ErrorModel(
+        {
+            Log.Error("Cannot create new {@Photo}. Exception details: {@Exception}",
+                nameof(Photo), exception);
+            return TypedResults.BadRequest(new ErrorModel(
                 StatusCodes.Status400BadRequest,
-                exception.Message)));
+                exception.Message));
+        });
     }
 
     private async Task<IResult> GetPhotoById(IMediator mediator, Guid id, string repositoryName,

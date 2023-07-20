@@ -38,7 +38,7 @@ public record Photo
 
     [Column("PhotographerId")]
     [ForeignKey("Photographer")]
-    public Guid? PhotographerId { get; init; }
+    public Guid PhotographerId { get; init; }
 
     public Photographer? Photographer { get; set; }
 };

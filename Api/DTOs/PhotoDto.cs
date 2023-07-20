@@ -8,7 +8,7 @@ public class PhotoDto
     public string PhotoName { get; init; } = string.Empty;
     public string AbsolutePath { get; init; } = string.Empty;
     public string FileExtension { get; init; } = string.Empty;
-        
+
     public Guid? PhotographerId { get; set; } = Guid.Parse("bec9fa90-8ab6-4d87-91ce-22291c165d84");
 
 
@@ -20,7 +20,7 @@ public class PhotoDto
             PhotoName = photoDto.PhotoName,
             AbsolutePath = photoDto.AbsolutePath,
             FileExtension = photoDto.FileExtension,
-            PhotographerId = photoDto.PhotographerId
+            PhotographerId = (Guid)photoDto.PhotographerId!
         };
     }
 }

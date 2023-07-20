@@ -5,8 +5,9 @@ namespace Api.Extensions;
 
 public static class RepositoriesConfiguration
 {
-    public static void AddCustomRepositories(this IServiceCollection services)
+    public static IServiceCollection AddCustomRepositories(this IServiceCollection services)
     {
         services.AddScoped(typeof(IRepositoryFactory), typeof(RepositoryFactory));
+        return services;
     }
 }

@@ -70,7 +70,7 @@ namespace Application.Factories
                     var dapperRepository = new DapperRepository(dbContext);
 
                     return Task.FromResult<IDatabaseRepository>(dapperRepository);
-
+                
                 default:
                     throw new ApplicationException($"Service {repositoryType.ToString()} not found");
             }

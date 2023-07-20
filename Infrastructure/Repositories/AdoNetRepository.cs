@@ -24,7 +24,7 @@ public class AdoNetRepository : IDatabaseRepository
         SELECT "Id", "PhotoName", "AbsolutePath", "FileExtension", "PhotographerId"
         FROM public."Photos";
         """;
-
+        
         var result = new List<Photo>();
         await using var command = new NpgsqlCommand(commandText, connection);
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
