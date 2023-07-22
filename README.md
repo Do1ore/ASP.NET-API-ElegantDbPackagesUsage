@@ -4,7 +4,7 @@
 
 
 
- ### Api has CRUD endpoints to work with database most popular ways:
+ ### CRUD endpoints to work with database most popular ways:
 
  - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
  - [Dapper](https://www.learndapper.com/)
