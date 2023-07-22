@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: cd ./Api/; dotnet restore
+      run: dotnet restore api
     - name: Build
       run: dotnet build api --configuration Release
     - name: Unit Test
