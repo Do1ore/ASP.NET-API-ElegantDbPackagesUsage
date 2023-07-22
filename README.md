@@ -28,7 +28,7 @@ Serilog is a flexible and feature-rich logging library for .NET applications. By
 ```
 
 
-#### Get entitiy by id
+#### Get entity by id
 
 ```http
   GET /api/items/${id}
