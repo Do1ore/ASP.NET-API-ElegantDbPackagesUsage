@@ -22,4 +22,4 @@ jobs:
     - name: Build
       run:  cd ./Api/; dotnet build --configuration Release
     - name: Unit Test
-      run: cd ./Tests/ dotnet test --configuration Release
+      run: cd ./Tests/; dotnet test --configuration Release
