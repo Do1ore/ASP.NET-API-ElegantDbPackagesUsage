@@ -1,0 +1,25 @@
+name: ASP.NET WEB API CI 
+
+on:
+  push:
+    branches: [ "master, feature" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: cd ./Api/;dotnet restore
+    - name: Build
+      run:  cd ./Api/; dotnet build api --configuration Release
+    - name: Unit Test
+      run: cd ./Tests/ dotnet test --configuration Release
