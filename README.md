@@ -20,14 +20,14 @@ Serilog is a flexible and feature-rich logging library for .NET applications. By
 
 ## API Reference
 
-#### Get all items
+#### Get all entities
 
 ```http
   GET /api/v1/photos
 ```
 
 
-#### Get all photos
+#### Get entitiy by id
 
 ```http
   GET /api/items/${id}
