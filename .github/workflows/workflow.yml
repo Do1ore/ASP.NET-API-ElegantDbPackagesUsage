@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: cd ./Api/; dotnet restore
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build api --configuration Release
     - name: Unit Test
-      run: dotnet test --configuration Release
+      run: dotnet test tests --configuration Release
