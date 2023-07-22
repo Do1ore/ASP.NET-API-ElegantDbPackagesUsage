@@ -42,11 +42,13 @@
 - Delete
 - Create
 - Chech for existing
+- Health check
 
 
 ## Tech Stack
 
 **Api** 
+- Docker
 - EntityFrameworkCore.PostgreSQL
 - Dapper
 - Ado.Net 
@@ -54,4 +56,8 @@
 - FluentValidation
 - LanguageExt.Core
 - Swagger
+- Elasticsearch
+- Kibana
+- Redis
+- Redis commander
 
