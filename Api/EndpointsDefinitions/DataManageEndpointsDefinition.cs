@@ -14,7 +14,7 @@ using Serilog;
 
 namespace Api.EndpointsDefinitions;
 
-public class EfCoreEndpointsDefinition : IEndpointDefinition
+public class DataManageEndpointsDefinition : IEndpointDefinition
 {
     public void RegisterEndpoints(WebApplication app)
     {
@@ -32,20 +32,20 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     }
 
 
-    private async Task<IResult> GetAllPhotos(IMediator mediator, string repositoryName, CancellationToken token)
+    public async Task<IResult> GetAllPhotos(IMediator mediator, string repositoryName, CancellationToken token)
     {
         var result = await mediator.Send(new GetAllPhotosRequest(repositoryName.ToRepositoryType()), token);
         return result.ToOkResult(values => values);
     }
 
-    private async Task<IResult> UpdatePhoto(IMediator mediator, string repositoryName, PhotoDto photoDto,
+    public async Task<IResult> UpdatePhoto(IMediator mediator, string repositoryName, PhotoDto photoDto,
         CancellationToken token)
     {
         var result = await mediator.Send(new UpdatePhotoRequest(photoDto, repositoryName.ToRepositoryType()), token);
         return result.ToOkResult(values => values);
     }
 
-    private async Task<IResult> CreatePhoto(IMediator mediator, string repositoryName, PhotoDto photoDto,
+    public async Task<IResult> CreatePhoto(IMediator mediator, string repositoryName, PhotoDto photoDto,
         CancellationToken token)
     {
         DtoHelper.CheckOrGenerateEntityKey(ref photoDto);
@@ -54,7 +54,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
         return result.ToOkResult(values => values);
     }
 
-    private async Task<IResult> GetPhotoById(IMediator mediator, Guid id, string repositoryName,
+    public async Task<IResult> GetPhotoById(IMediator mediator, Guid id, string repositoryName,
         CancellationToken token)
     {
         var result = await mediator.Send(new GetByIdRequest(id, repositoryName.ToRepositoryType()), token);
@@ -63,7 +63,7 @@ public class EfCoreEndpointsDefinition : IEndpointDefinition
     }
 
 
-    private async Task<IResult> DeletePhoto(IMediator mediator, string repositoryName, Guid id)
+    public async Task<IResult> DeletePhoto(IMediator mediator, string repositoryName, Guid id)
     {
         var result = await mediator.Send(new DeletePhotoRequest(id, repositoryName.ToRepositoryType()));
 
