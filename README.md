@@ -10,9 +10,9 @@
  - [Dapper](https://www.learndapper.com/)
  - [Ado.Net](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/ado-net-overview)
 
- ##Kibana to analyse logs from application.
- ##Redis caching to raise app perfomance
- ##Seilog to log data to elastic search
+ ## Kibana to analyse logs from application.
+ ## Redis caching to raise app perfomance
+ ## Seilog to log data to elastic search
 
 
 ## API Reference
