@@ -11,6 +11,10 @@
 
   <ItemGroup>
     <PackageReference Include="ADO.Net.Client.Core" Version="1.4.5" />
+    <PackageReference Include="AspNetCore.HealthChecks.Elasticsearch" Version="7.0.0-rc2.6" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="7.0.0-rc2.7" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="7.0.0-rc2.6" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.0.0-rc2.7" />
     <PackageReference Include="MediatR" Version="12.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.2" />

@@ -1,11 +1,15 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Api.Abstractions;
 using Application.Features.AddFeature;
 using Application.Features.UpdateFeature;
 using Domain.Common;
 using FluentValidation;
+using HealthChecks.UI.Client;
 using Infrastructure.Enums;
+using LanguageExt.Common;
 using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 
@@ -98,5 +102,39 @@ public static class MinimalApiExtenstion
             _ => throw new ArgumentException($"Type [{stringRepositoryType}] is unknown.")
         };
     }
-    
+
+    public static IResult ToOkResult<TResult, TContract>(
+        this Result<TResult> result, Func<TResult, TContract> mapper)
+    {
+        return result.Match<IResult>(obj =>
+        {
+            var response = mapper(obj);
+            Log.Information("Success operation with {@Type}", typeof(TResult));
+            return TypedResults.Ok(response);
+        }, exception =>
+        {
+            Log.Error("Cannot create new entity typeof {@Entity}. Exception details: {@Exception}",
+                typeof(TResult), exception);
+            return TypedResults.BadRequest(new ErrorModel(StatusCodes.Status400BadRequest, exception.Message));
+        });
+    }
+
+    public static void AddConfiguredHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHealthChecks()
+            .AddNpgSql(configuration.GetConnectionString("PostgreSQLConnection") ??
+                       throw new Exception("Connection for npgsql not found"))
+            .AddRedis(configuration.GetConnectionString("RedisConnection") ??
+                      throw new Exception("Connection for redis not found"))
+            .AddElasticsearch(configuration.GetConnectionString("ElasticConnection") ??
+                              throw new Exception("Connection for elasticsearch not found"));
+    }
+
+    public static void MapAndConfigureHealthChecks(this WebApplication app)
+    {
+        app.MapHealthChecks("/_health", new HealthCheckOptions()
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+    }
 }
