@@ -1,5 +1,7 @@
 using Api.Extensions;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
@@ -18,10 +20,12 @@ builder.Services.ConfigureDapper(builder.Configuration);
 builder.Services.ConfigureRedis(builder.Configuration);
 //Repositories
 builder.Services.AddCustomRepositories();
-
 builder.Services.AddMediatRValidators();
 
-ConfigureLogger();
+//Health
+builder.Services.AddConfiguredHealthChecks(builder.Configuration);
+
+ConfigureLogger(builder.Configuration);
 builder.Host.UseSerilog();
 
 
@@ -41,10 +45,11 @@ app.RegisterEndpointDefinitions();
 
 app.UseHttpsRedirection();
 
+app.MapAndConfigureHealthChecks();
 
 app.Run();
 
-void ConfigureLogger()
+void ConfigureLogger(IConfiguration conf)
 {
     var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ??
                       throw new Exception("Variable ASPNETCORE_ENVIRONMENT not found");
@@ -60,15 +65,17 @@ void ConfigureLogger()
         .Enrich.WithExceptionDetails()
         .WriteTo.Debug()
         .WriteTo.Console()
-        .WriteTo.Elasticsearch(ConfigureEls(configuration, environment))
+        .WriteTo.Elasticsearch(ConfigureEls(conf, environment))
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
 }
 
 ElasticsearchSinkOptions ConfigureEls(IConfiguration config, string env)
 {
-    return new ElasticsearchSinkOptions(new Uri(config.GetConnectionString("ElasticConnection") ??
-                                                throw new Exception("Connection for elasticsearch not found")))
+    var connectionString = config.GetConnectionString("ElasticConnection") ??
+                           throw new Exception("Connection for elasticsearch not found");
+
+    return new ElasticsearchSinkOptions(new Uri(connectionString))
     {
         IndexFormat =
             $"{config["ApplicationName"]}-logs-" +

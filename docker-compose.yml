@@ -7,6 +7,7 @@ networks:
 services:
   api:
     image: ${DOCKER_REGISTRY-}api
+    container_name: api
     build:
       context: .
       dockerfile: Api/Dockerfile
@@ -22,7 +23,7 @@ services:
       - ASPNETCORE_URLS=https://+:80
       - ConnectionStrings__RedisConnection=redis:6379
       - ConnectionStrings__PostgreSQLConnection=User ID=postgres;Password=postgre;Server=db_server;Port=5432;Database=MultiOperation;Pooling=true;
-      - ConnectionStrings__ElasticConnection=http://elastic:9200
+      - ConnectionStrings__ElasticConnection=http://elasticsearch:9200
 
     ports:
       - "8080:80"
@@ -71,7 +72,7 @@ services:
   
   elasticsearch:
     container_name: es-container
-    hostname: elastic
+    hostname: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     environment:
       - xpack.watcher.enabled=false
@@ -89,7 +90,7 @@ services:
     container_name: kb-container
     image: docker.elastic.co/kibana/kibana:7.11.0
     environment:
-      - ELASTICSEARCH_HOSTS=http://elastic:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     networks:
       - hyperlink
     depends_on:
